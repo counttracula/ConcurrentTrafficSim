@@ -29,11 +29,12 @@ void WaitingVehicles::permitEntryToFirstInQueue()
 {
     std::lock_guard<std::mutex> lock(_mutex);
 
-    // get entries from the front of both queues
+    // get iterators from the front of both queues
     auto firstPromise = _promises.begin();
     auto firstVehicle = _vehicles.begin();
 
     // fulfill promise and send signal back that permission to enter has been granted
+    // since firstPromise is an iterator use ->
     firstPromise->set_value();
 
     // remove front elements from both queues
