@@ -27,12 +27,6 @@ TrafficObject::TrafficObject()
 }
 
 TrafficObject::~TrafficObject() {
-
-    // replacing the below with a simpler and more up-to-date C++ syntax
-//    std::for_each(threads.begin(), threads.end(), [](std::thread &t) {
-//        t.join();
-//    });
-
     // set up thread barrier before this object is destroyed
     for (auto &t: threads) {
         t.join();
