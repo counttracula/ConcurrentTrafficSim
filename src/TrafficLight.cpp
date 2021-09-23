@@ -18,6 +18,8 @@ T MessageQueue<T>::receive() {
 template <class T>
 void MessageQueue<T>::send(T &&msg) {
     std::lock_guard<std::mutex> lck(_mutex); // add the message to the queue under the lock
+    // added at the suggestion of the reviewer. The purpose is to
+    _queue.clear();
     _queue.emplace_back(std::move(msg));
     _cv.notify_one(); // notify client
 }
@@ -69,7 +71,7 @@ void TrafficLight::cycleThroughPhases() {
                 (( oldPhase == TrafficLightPhase::red) ? "red" : "green")<< " to " <<
                 (( _currentPhase == TrafficLightPhase::red) ? "red" : "green") << "\n";
             timeStart = std::chrono::high_resolution_clock::now(); // get the new start of the cycle
+            _queue.send(std::move(_currentPhase));
         }
-        _queue.send(std::move(_currentPhase));
     }
 }
